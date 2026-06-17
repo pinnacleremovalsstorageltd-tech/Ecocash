@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - EcoCash Partner Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">Your Profile</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Username:</strong> {{ user.username }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                        <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Company:</strong> {{ user.company_name }}</p>
+                        <p><strong>Phone:</strong> {{ user.phone_number }}</p>
+                        <p><strong>Account Status:</strong> <span class="badge bg-info">{{ user.account_status }}</span></p>
+                        <p><strong>User Type:</strong> <span class="badge bg-primary">{{ user.get_user_type_display }}</span></p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'accounts:profile_edit' %}" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

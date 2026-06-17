@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login - EcoCash Partner Portal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block navbar %}
+<div class="login-topbar py-2">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <div class="topbar-left text-white d-flex align-items-center gap-3 flex-wrap">
+            <span>Contact Centre: 📱114</span>
+            <span>✉ ecocashhelpdesk@ecocash.co.zw</span>
+        </div>
+        <div class="topbar-right d-flex align-items-center gap-3 flex-wrap">
+            <span class="text-white">Currency</span>
+            <select class="form-select login-currency form-select-sm">
+                <option selected>ZWG</option>
+                <option>USD</option>
+                <option>EUR</option>
+            </select>
+            <a href="{% url 'accounts:login' %}" class="text-white text-decoration-none">Login</a>
+            <a href="{% url 'accounts:signup' %}" class="text-white text-decoration-none">Register</a>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm login-main-nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><span class="logo-eco">Eco</span><span class="logo-cash">Cash</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#loginPageNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="loginPageNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://pay.ecocash.co.zw/airtime-bundles" target="_blank" rel="noopener">Airtime &amp; Bundles</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://pay.ecocash.co.zw/sign-in#" target="_blank" rel="noopener">Packages</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://pay.ecocash.co.zw/statements" target="_blank" rel="noopener">Wallet Statement</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://pay.ecocash.co.zw/contactus" target="_blank" rel="noopener">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://pay.ecocash.co.zw/profile" target="_blank" rel="noopener">Profile</a></li>
+            </ul>
+            <ul class="navbar-nav ms-auto align-items-center">
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:profile' %}">Profile</a></li>
+                <li class="nav-item"><a class="btn btn-outline-secondary btn-sm ms-2" href="{% url 'accounts:logout' %}">Logout</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:signup' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{% endblock %}
+
+{% block content %}
+<section class="login-hero">
+    <div class="login-card row g-0">
+        <div class="left-panel col-lg-6 col-sm-12">
+            <div class="logo-bar">
+                <div class="logo"><span class="logo-eco">Eco</span><span class="logo-cash">Cash</span></div>
+                <!-- <div class="nav-links">
+                    <a href="https://pay.ecocash.co.zw/airtime-bundles" target="_blank" rel="noopener">Airtime &amp; Bundles</a>
+                    <a href="https://pay.ecocash.co.zw/sign-in#" target="_blank" rel="noopener">Packages</a>
+                    <a href="https://pay.ecocash.co.zw/statements" target="_blank" rel="noopener">Wallet Statement</a>
+                    <a href="https://pay.ecocash.co.zw/contactus" target="_blank" rel="noopener">Contact Us</a>
+                </div> -->
+            </div>
+
+            <div>
+                <h1 class="login-title">Login Account</h1>
+                <p class="login-subtitle">Welcome to EcoCash Online Bill Payments</p>
+            </div>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <div class="mb-4">
+                    <label class="form-label" for="id_username">Username</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                    <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="id_password">Password</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                    <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="d-grid mb-4">
+                    <button type="submit" class="btn btn-login">LOGIN</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="right-panel col-lg-6 d-none d-lg-flex">
+            <div>
+                <h2 class="right-headline">Welcome back</h2>
+                <p class="right-copy">Manage your funds, pay bills instantly, and keep your wallet secure with the EcoCash Partner Portal.</p>
+                <img src="{% static 'images/wz.jpg' %}" alt="Login illustration">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
