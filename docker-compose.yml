@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=postgresql://ecocash_user:ecocash_password@db:5432/ecocash
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=ecocash
+      - POSTGRES_USER=ecocash_user
+      - POSTGRES_PASSWORD=ecocash_password
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}EcoCash - Utility Bill Payments{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="homepage-hero">
+    <div class="hero-banner"></div>
+    <div class="container py-5 hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge bg-white text-primary mb-3">Utility Bill Payments</span>
+                <h1>Fast payments from the comfort of your wallet</h1>
+                <p class="lead">EcoCash makes paying utility bills, credit stores, medical aid, and council services simple, secure and instant.</p>
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    <a href="{% url 'accounts:login' %}" class="btn btn-light btn-lg text-primary">Login</a>
+                    <a href="{% url 'accounts:signup' %}" class="btn btn-outline-light btn-lg text-white">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container homepage-tabs py-4">
+    <ul class="nav nav-pills justify-content-center flex-wrap gap-2">
+        <li class="nav-item"><a class="nav-link active" href="#"><span class="icon">💡</span> Utility Bills</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span class="icon">🩺</span> Medical Aid</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span class="icon">🏛️</span> Councils</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span class="icon">🛡️</span> Insurance</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span class="icon">🌐</span> Internet Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span class="icon">🏬</span> Credit Stores</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span class="icon">💰</span> Microfinance</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span class="icon">🎓</span> Tertiary</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span class="icon">⋯</span> More</a></li>
+    </ul>
+</div>
+
+<div class="container homepage-section py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-dark">Select Biller to Pay</h2>
+            <p class="text-muted">Choose from our trusted partners to make fast, secure payments.</p>
+        </div>
+    </div>
+    <div class="row gy-4">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="feature-card text-center p-4">
+                <div class="card-body">
+                    <div class="mb-3 display-5">⚡</div>
+                    <h5>Electricity</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="feature-card text-center p-4">
+                <div class="card-body">
+                    <div class="mb-3 display-5">🏥</div>
+                    <h5>Medical Aid</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="feature-card text-center p-4">
+                <div class="card-body">
+                    <div class="mb-3 display-5">🏛️</div>
+                    <h5>Councils</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="feature-card text-center p-4">
+                <div class="card-body">
+                    <div class="mb-3 display-5">💳</div>
+                    <h5>Credit Stores</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row gx-4 gy-4">
+        <div class="col-lg-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Secure payments</h5>
+                    <p class="card-text text-muted">Your account activity is protected and managed from a central partner dashboard.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Instant reconciliation</h5>
+                    <p class="card-text text-muted">Track payments, view reports, and manage applications from one place.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Ready to deploy</h5>
+                    <p class="card-text text-muted">Built to work seamlessly with the EcoCash dashboard and partner portal experience.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
