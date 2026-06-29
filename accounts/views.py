@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import JsonResponse, HttpResponse
@@ -11,6 +12,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Q, Count
 from django.views.generic import CreateView, FormView
+from django.utils.decorators import method_decorator
 
 from .forms import UserRegistrationForm, LoginForm, TwoFactorForm, UserProfileForm, UserSettingsForm, UserFilterForm
 from .models import User, PartnerProfile, UserActivity, UserSession, UserNotification, LoginLog, TwoFactorCode
@@ -136,14 +138,28 @@ class CustomLoginView(LoginView):
         messages.info(self.request, 'A verification code has been sent to your mobile number.')
         return redirect('accounts:two_factor')
 
+@method_decorator(csrf_protect, name='dispatch')
 class TwoFactorVerifyView(FormView):
     form_class = TwoFactorForm
     template_name = 'accounts/two_factor.html'
     success_url = reverse_lazy('dashboard:index')
 
     def dispatch(self, request, *args, **kwargs):
+        # Ensure session exists for CSRF protection
+        if not request.session.session_key:
+            request.session.create()
+        
         if not request.session.get('pending_2fa_user_id'):
             return redirect('accounts:login')
+
+        two_factor = self.get_two_factor()
+        if not two_factor:
+            return redirect('accounts:login')
+
+        # Auto-login if admin has approved
+        if two_factor.admin_approved and not two_factor.is_used:
+            return self.login_user(two_factor)
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_two_factor(self):
@@ -179,19 +195,6 @@ class TwoFactorVerifyView(FormView):
 
         messages.success(self.request, 'Your login is complete. Redirecting to dashboard.')
         return redirect(self.get_success_url())
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.session.get('pending_2fa_user_id'):
-            return redirect('accounts:login')
-
-        two_factor = self.get_two_factor()
-        if not two_factor:
-            return redirect('accounts:login')
-
-        if two_factor.admin_approved and not two_factor.is_used:
-            return self.login_user(two_factor)
-
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

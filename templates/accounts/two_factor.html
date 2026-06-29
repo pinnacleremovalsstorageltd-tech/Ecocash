@@ -10,6 +10,11 @@
     .verification-title { font-size: 2rem; font-weight: 700; color: #0d1f4f; }
     .verification-subtitle { color: #5a5f72; margin-bottom: 1.5rem; }
     .spinner-border { width: 1.5rem; height: 1.5rem; margin-left: 0.5rem; }
+    /* Ensure viewport is set for mobile */
+    @media (max-width: 768px) {
+        .verification-card { padding: 20px; }
+        .verification-title { font-size: 1.5rem; }
+    }
 </style>
 {% endblock %}
 
@@ -21,7 +26,8 @@
                 <h1 class="verification-title">Two-Factor Authentication</h1>
                 <p class="verification-subtitle">A 6-digit code was sent to <strong>{{ phone_number }}</strong>. Enter it below to complete login.</p>
 
-                <form method="post" id="two-factor-form">
+                <!-- Form with explicit method and action for mobile compatibility -->
+                <form method="post" id="two-factor-form" action="{% url 'accounts:two_factor' %}">
                     {% csrf_token %}
                     {% if form.non_field_errors %}
                     <div class="alert alert-danger">{{ form.non_field_errors }}</div>
@@ -36,7 +42,7 @@
                     </div>
 
                     <div class="d-grid gap-2 mb-3">
-                        <button type="submit" class="btn btn-login" id="verify-button">
+                        <button type="submit" class="btn btn-login" id="verify-button" name="verify" value="1">
                             VERIFY CODE
                             <span class="spinner-border spinner-border-sm d-none" id="verify-spinner" role="status" aria-hidden="true"></span>
                         </button>
@@ -63,10 +69,25 @@
         const form = document.getElementById('two-factor-form');
         const verifyButton = document.getElementById('verify-button');
         const spinner = document.getElementById('verify-spinner');
+        const codeInput = document.getElementById('id_code');
 
-        form.addEventListener('submit', function() {
-            verifyButton.disabled = true;
-            spinner.classList.remove('d-none');
+        // Auto-format code input for better mobile UX
+        if (codeInput) {
+            codeInput.setAttribute('inputmode', 'numeric');
+            codeInput.setAttribute('maxlength', '6');
+        }
+
+        form.addEventListener('submit', function(e) {
+            // Only show spinner for verify button, not resend
+            if (verifyButton.clicked) {
+                verifyButton.disabled = true;
+                spinner.classList.remove('d-none');
+            }
+        });
+
+        // Track which button was clicked
+        verifyButton.addEventListener('click', function() {
+            verifyButton.clicked = true;
         });
     });
 </script>
